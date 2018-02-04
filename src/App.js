@@ -14,12 +14,17 @@ class App extends Component {
   onPlacesChanged = (search) => {
     const place = search.getPlaces()[0];
 
-    if (place) {
+    if (place && !this.isPlaceInStateAllready(place)) {
       this.setState({
         places: [...this.state.places, place],
       });
     }
   }
+
+  isPlaceInStateAllready = (newPlace) => (
+    this.state.places
+      .some(place => place.place_id === newPlace.place_id)
+  )
 
   render() {
     return (
