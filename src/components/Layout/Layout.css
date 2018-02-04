@@ -3,6 +3,7 @@
 }
 
 .LayoutContent {
+  display: flex;
   width: 90%;
   height: 75vh;
   margin: 0 auto;
