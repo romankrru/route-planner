@@ -4,6 +4,7 @@ import { withScriptjs } from 'react-google-maps';
 import { StandaloneSearchBox } from 'react-google-maps/lib/components/places/StandaloneSearchBox';
 
 import { GOOGLE_MAPS_URL } from '../../constants';
+import styles from './SearchBox.css';
 
 const SearchBox = compose(
   withProps({
@@ -28,20 +29,9 @@ const SearchBox = compose(
       >
         <input
           ref={input => inputElement = input}
+          className={styles.SearchBox}
           type="text"
-          placeholder="Customized your placeholder"
-          style={{
-            boxSizing: `border-box`,
-            border: `1px solid transparent`,
-            width: `240px`,
-            height: `32px`,
-            padding: `0 12px`,
-            borderRadius: `3px`,
-            boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
-            fontSize: `14px`,
-            outline: `none`,
-            textOverflow: `ellipses`,
-          }}
+          placeholder="Type here"
         />
       </StandaloneSearchBox>
     </div>
