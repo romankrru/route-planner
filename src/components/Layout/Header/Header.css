@@ -1,0 +1,8 @@
+.Header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 15vh;
+  
+  font-size: 26px;
+}
