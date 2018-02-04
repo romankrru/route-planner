@@ -1,0 +1,38 @@
+.Place {
+  position: relative;
+
+  padding: 18px 10%;
+  margin-bottom: 20px;
+  font-size: 14px;
+
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+}
+
+.Place::before {
+  position: absolute;
+  top: 20px;
+  left: 5%;
+
+  content: '';
+  width: 11px;
+  height: 15px;
+
+  display: block;
+
+  background-image: url('../../../assets/img/icons/marker-white.svg');
+}
+
+.PlaceName {
+  margin-bottom: 13px;
+}
+
+.PlaceDelete {
+  text-align: right;
+  font-weight: bold;
+
+  cursor: pointer;
+}
+
+.PlaceDelete:hover {
+  text-decoration: underline;
+}

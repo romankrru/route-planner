@@ -1,0 +1,18 @@
+<svg width="9" height="27" viewBox="0 0 9 27" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="Canvas" transform="translate(-8618 -467)">
+<g id="Group 2">
+<g id="Ellipse">
+<use xlink:href="#path0_fill" transform="translate(8620 467)" fill="#FFFFFF"/>
+</g>
+<g id="Ellipse">
+<use xlink:href="#path0_fill" transform="translate(8620 477)" fill="#FFFFFF"/>
+</g>
+<g id="Ellipse">
+<use xlink:href="#path0_fill" transform="matrix(-0.615769 0.787926 -0.787926 -0.615769 8626.01 489.07)" fill="#FFFFFF"/>
+</g>
+</g>
+</g>
+<defs>
+<path id="path0_fill" d="M 5 2.5C 5 3.88071 3.88071 5 2.5 5C 1.11929 5 0 3.88071 0 2.5C 0 1.11929 1.11929 0 2.5 0C 3.88071 0 5 1.11929 5 2.5Z"/>
+</defs>
+</svg>

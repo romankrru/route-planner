@@ -1,3 +1,5 @@
 .Sidebar {
   width: 33%;
+
+  overflow-y: auto;
 }
