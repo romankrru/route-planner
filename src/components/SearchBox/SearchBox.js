@@ -14,15 +14,20 @@ const SearchBox = compose(
   withScriptjs
 )(props => {
   let searchInput = null;
+  let inputElement = null;
 
   return (
     <div data-standalone-searchbox="">
       <StandaloneSearchBox
         ref={(input) => searchInput = input}
         bounds={props.bounds}
-        onPlacesChanged={() => props.onPlacesChanged(searchInput)}
+        onPlacesChanged={() => {
+          inputElement.value = '';
+          props.onPlacesChanged(searchInput)
+        }}
       >
         <input
+          ref={input => inputElement = input}
           type="text"
           placeholder="Customized your placeholder"
           style={{
