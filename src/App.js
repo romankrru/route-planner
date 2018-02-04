@@ -12,7 +12,7 @@ class App extends Component {
   }
 
   onPlacesChanged = (search) => {
-    const place = search.getPlaces()[0]
+    const place = search.getPlaces()[0];
 
     if (place) {
       this.setState({
@@ -30,7 +30,7 @@ class App extends Component {
           />
           <Places places={this.state.places} />
         </Sidebar>
-        <Map />
+        <Map places={this.state.places} />
       </Layout>
     );
   }
