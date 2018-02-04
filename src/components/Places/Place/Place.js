@@ -8,7 +8,10 @@ const Place = (props) => {
       <div className={styles.PlaceName}>
         {props.children}
       </div>
-      <div className={styles.PlaceDelete}>
+      <div
+        className={styles.PlaceDelete}
+        onClick={props.onPlaceDelete}
+      >
         DELETE
       </div>
     </li>

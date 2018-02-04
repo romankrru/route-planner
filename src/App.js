@@ -26,14 +26,23 @@ class App extends Component {
       .some(place => place.place_id === newPlace.place_id)
   )
 
+  onPlaceDelete = (placeId) => {
+    this.setState({
+      places: this.state.places.filter(place => (
+        place.place_id !== placeId
+      )),
+    });
+  }
+
   render() {
     return (
       <Layout>
         <Sidebar>
-          <SearchBox
-            onPlacesChanged={this.onPlacesChanged}
+          <SearchBox onPlacesChanged={this.onPlacesChanged} />
+          <Places 
+            places={this.state.places}
+            onPlaceDelete={this.onPlaceDelete}
           />
-          <Places places={this.state.places} />
         </Sidebar>
         <Map places={this.state.places} />
       </Layout>
