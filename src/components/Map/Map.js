@@ -7,6 +7,7 @@ import {
   Marker
 } from "react-google-maps";
 
+import mapStyle from './style';
 import { GOOGLE_MAPS_URL } from '../../constants';
 
 class BaseMap extends Component {
@@ -32,8 +33,9 @@ class BaseMap extends Component {
     return (
       <GoogleMap
         ref={this.props.onMapMounted}
-        defaultZoom={8}
+        defaultZoom={10}
         defaultCenter={{ lat: 55.746382, lng: 37.617365 }}
+        defaultOptions={{ styles: mapStyle, disableDefaultUI: true }}
       >
         {markers}
       </GoogleMap>
@@ -72,6 +74,9 @@ const Map = compose(
           refs.map.fitBounds(bounds);
         }
       });
+    },
+    componentDidMount() {
+      console.log('mount')
     }
   }),
   withScriptjs,
