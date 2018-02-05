@@ -34,14 +34,25 @@ class App extends Component {
     });
   }
 
+  // this function will be invoked
+  // then place in sidebar dragged
+  onPlaceMove = (dragIndex, hoverIndex) => {
+    const newPlaces = [...this.state.places];
+    newPlaces.splice(dragIndex, 0, newPlaces.splice(hoverIndex, 1)[0]);
+    this.setState({
+      places: newPlaces,
+    });
+  }
+
   render() {
     return (
       <Layout>
         <Sidebar>
           <SearchBox onPlacesChanged={this.onPlacesChanged} />
-          <Places 
+          <Places
             places={this.state.places}
             onPlaceDelete={this.onPlaceDelete}
+            onPlaceMove={this.onPlaceMove}
           />
         </Sidebar>
         <Map places={this.state.places} />

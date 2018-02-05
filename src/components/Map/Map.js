@@ -44,7 +44,7 @@ class BaseMap extends Component {
         defaultCenter={{ lat: 55.746382, lng: 37.617365 }}
         defaultOptions={{ styles: mapStyleConfig, disableDefaultUI: true }}
       >
-        {markers}
+        {/*markers*/}
         {this.props.directions && <DirectionsRenderer directions={this.props.directions} />}
       </GoogleMap>
     );
