@@ -21,7 +21,7 @@ class BaseMap extends Component {
     fitBounds: PropTypes.func.isRequired,
     directions: PropTypes.objectOf(PropTypes.any),
     onDirectionsRendererMounted: PropTypes.func.isRequired,
-    getNewPlaceData: PropTypes.func.isRequired,
+    onDirectionsChanged: PropTypes.func.isRequired,
     updatePlacesAfterMarkerDragged: PropTypes.func.isRequired,
     onMapMounted: PropTypes.func.isRequired,
   }
@@ -68,9 +68,21 @@ class BaseMap extends Component {
         <DirectionsRenderer
           ref={this.props.onDirectionsRendererMounted}
           onDirectionsChanged={() => {
-              this.props.getNewPlaceData()
-                .then(([data, draggedMarkerIndex]) => {
-                  this.props.updatePlacesAfterMarkerDragged(data, draggedMarkerIndex);
+              this.props.onDirectionsChanged()
+                .then(([geocodedData, index, newDirections]) => {
+                  const currentDirectionsCount = this.props.directions.geocoded_waypoints.length;
+                  const newDirectionsCount = newDirections.geocoded_waypoints.length;
+
+                  // if condition below is true this means user trying to
+                  // create a new intermediate waypoint by dragging point
+                  // on rendered direction path and I'm not going to handle this case
+                  if (newDirectionsCount > currentDirectionsCount) {
+                    return;
+                  }
+
+                  // if condition is false this means user drags an exising
+                  // marker and corresponding place in state should be updated
+                  this.props.updatePlacesAfterMarkerDragged(geocodedData, index);
                 });
             }}
           options={{ draggable: true }}
@@ -111,11 +123,13 @@ const Map = compose(
         onDirectionsRendererMounted: (ref) => {
           refs.directionsRenderer = ref;
         },
-        getNewPlaceData: () => {
-          // this function will be invoked then user drags route marker,
-          // it will return promise which resolves with array:
+        onDirectionsChanged: () => {
+          // this function will be invoked then user drags an existing marker or
+          // creates new waypoint by dragging point on direction path
+          // it will return promise which resolves with an array:
           // 1st element - information about place under the marker,
           // 2nd element - index of dragged marker (marker A has 0 index, marker B - 1 and so on...)
+          // 3rd - object with new directions
           if (!refs.directionsRenderer) {
             return undefined;
           }
@@ -130,7 +144,7 @@ const Map = compose(
             geocoder.geocode({
               placeId: newPlaceId,
             }, (result) => {
-              resolve([result[0], draggedMarkerIndex]);
+              resolve([result[0], draggedMarkerIndex, newDirections]);
             });
           });
         },
