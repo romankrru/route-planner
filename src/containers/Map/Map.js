@@ -120,9 +120,7 @@ const Map = compose(
             return undefined;
           }
 
-          /* eslint-disable no-undef */
           const geocoder = new google.maps.Geocoder();
-          /* eslint-enable no-undef */
 
           const newDirections = refs.directionsRenderer.getDirections();
           const draggedMarkerIndex = newDirections.request.ac;
@@ -141,9 +139,7 @@ const Map = compose(
             return;
           }
 
-          /* eslint-disable no-undef */
           const bounds = new google.maps.LatLngBounds();
-          /* eslint-enable no-undef */
 
           places.forEach((place) => {
             bounds.extend(place.geometry.location);
@@ -158,9 +154,7 @@ const Map = compose(
       this.setState({
       /* eslint-enable react/no-did-mount-set-state */
         renderDirections: (places) => {
-          /* eslint-disable no-undef */
           const DirectionsService = new google.maps.DirectionsService();
-          /* eslint-enable no-undef */
 
           const origin = places[0].geometry.location;
           const destination = places[places.length - 1].geometry.location;
@@ -176,13 +170,9 @@ const Map = compose(
             origin,
             destination,
             waypoints,
-            /* eslint-disable no-undef */
             travelMode: google.maps.TravelMode.WALKING,
-            /* eslint-enable no-undef */
           }, (result, status) => {
-            /* eslint-disable no-undef */
             const okStatus = google.maps.DirectionsStatus.OK;
-            /* eslint-enable no-undef */
 
             if (status === okStatus) {
               this.setState({
