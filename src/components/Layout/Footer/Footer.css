@@ -1,0 +1,14 @@
+.Footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 10vh;
+}
+
+.FooterLink {
+  color: inherit;
+}
+
+.FooterLink:hover {
+  text-decoration: none;
+}

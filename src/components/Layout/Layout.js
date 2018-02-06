@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import styles from './Layout.css';
 import Header from './Header/Header';
+import Footer from './Footer/Footer';
 
 const Layout = props => (
   <div className={styles.Layout}>
@@ -10,6 +11,7 @@ const Layout = props => (
     <div className={styles.LayoutContent}>
       {props.children}
     </div>
+    <Footer />
   </div>
 );
 
