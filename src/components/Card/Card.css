@@ -1,4 +1,4 @@
-.Place {
+.Card {
   position: relative;
 
   padding: 18px 10%;
@@ -8,7 +8,7 @@
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
 }
 
-.Place::before {
+.Card::before {
   position: absolute;
   top: 20px;
   left: 5%;
@@ -19,20 +19,20 @@
 
   display: block;
 
-  background-image: url('../../../assets/img/icons/marker-white.svg');
+  background-image: url('../../assets/img/icons/marker-white.svg');
 }
 
-.PlaceName {
+.CardName {
   margin-bottom: 13px;
 }
 
-.PlaceDelete {
+.CardDelete {
   text-align: right;
   font-weight: bold;
 
   cursor: pointer;
 }
 
-.PlaceDelete:hover {
+.CardDelete:hover {
   text-decoration: underline;
 }

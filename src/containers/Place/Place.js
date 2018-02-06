@@ -2,9 +2,9 @@ import React from 'react';
 import { compose } from 'recompose';
 import { findDOMNode } from 'react-dom'
 import { DragSource, DropTarget } from 'react-dnd'
-import { dndItemTypes } from '../../../constants';
+import { dndItemTypes } from '../../constants';
 
-import styles from './Place.css';
+import Card from '../../components/Card/Card';
 
 const placeSource = {
   beginDrag(props) {
@@ -62,7 +62,7 @@ const placeTarget = {
   },
 };
 
-const EnhancedPlace = compose(
+const Place = compose(
   DropTarget(dndItemTypes.PLACE, placeTarget, connect => ({
     connectDropTarget: connect.dropTarget(),
   })),
@@ -73,20 +73,16 @@ const EnhancedPlace = compose(
 )(props => {
   return props.connectDragSource(
     props.connectDropTarget(
-      <li className={styles.Place} style={{opacity: props.isDragging ? 0 : 1}}>
-        <div className={styles.PlaceName}>
-          {props.letterIndex}:{' '}
-          {props.children}
-        </div>
-        <div
-          className={styles.PlaceDelete}
-          onClick={props.onPlaceDelete}
+      <div style={{ opacity: props.isDragging ? 0 : 1 }}>
+        <Card
+          letterIndex={props.letterIndex}
+          onCardDelete={props.onPlaceDelete}
         >
-          DELETE
+          {props.children}
+        </Card>
       </div>
-      </li>
     ),
   )
 });
 
-export default EnhancedPlace;
+export default Place;
