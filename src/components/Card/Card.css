@@ -27,8 +27,16 @@
 }
 
 .CardDelete {
+  display: block;
+  width: 100%;
+
+  color: inherit;
   text-align: right;
   font-weight: bold;
+
+  border: none;
+  outline: none;
+  background-color: inherit;
 
   cursor: pointer;
 }
