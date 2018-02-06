@@ -8,6 +8,6 @@ See live demo: [https://clever-shockley-deb618.netlify.com/](https://clever-shoc
 git clone https://github.com/romankrru/route-planner.git route-planner
 cd route-planner
 yarn install
-yarn run
+yarn start
 ```
 Open [http://localhost:3000](http://localhost:3000)
