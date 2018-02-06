@@ -44,6 +44,20 @@ class App extends Component {
     });
   }
 
+  updatePlacesAfterMarkerDragged = (newPlace, index) => {
+    const places = this.state.places;
+
+    const newPlaces = [
+      ...places.slice(0, index),
+      newPlace,
+      ...places.slice(index + 1),
+    ];
+
+    this.setState({
+      places: newPlaces,
+    });
+  }
+
   render() {
     return (
       <Layout>
@@ -55,7 +69,10 @@ class App extends Component {
             onPlaceMove={this.onPlaceMove}
           />
         </Sidebar>
-        <Map places={this.state.places} />
+        <Map
+          places={this.state.places}
+          updatePlacesAfterMarkerDragged={this.updatePlacesAfterMarkerDragged}
+        />
       </Layout>
     );
   }

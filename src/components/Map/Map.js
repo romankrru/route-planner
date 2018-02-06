@@ -11,7 +11,7 @@ import {
 import mapStyleConfig from './style';
 import { GOOGLE_MAPS_URL } from '../../constants';
 
-// component to render base map
+// component to render base map,
 // will be enhaced with HOCs later
 class BaseMap extends Component {
   componentWillReceiveProps(nextProps) {
@@ -19,23 +19,51 @@ class BaseMap extends Component {
       nextProps.places !== this.props.places &&
       nextProps.places.length !== 0
     ) {
-      // fit markers to view 
-      this.props.fitBounds(nextProps.places);
       this.props.renderDirections(nextProps.places);
+
+      if (nextProps.places.length !== this.props.places.length) {
+        // fit markers to view on new waypoint add
+        this.props.fitBounds(nextProps.places);
+      }
     }
   }
 
   render() {
-    const markers = this.props.places.map(place => {
-      const { location } = place.geometry;
+    let directions = null;
 
-      return (
+    // render routes directions only if
+    // user submited more then 1 places
+    // if not - render a simple marker
+    if (this.props.places.length === 1) {
+      const [ place ] = this.props.places;
+      const { location } = place.geometry
+
+      directions = (
         <Marker
           key={place.place_id}
-          position={{ lat: location.lat(), lng: location.lng() }}
+          position={{ 
+            lat: location.lat(),
+            lng: location.lng(),
+          }}
         />
       );
-    });
+    } else {
+      if (this.props.directions) {
+        directions = (
+          <DirectionsRenderer
+            ref={this.props.onDirectionsRendererMounted}
+            onDirectionsChanged={() => {
+              this.props.getNewPlaceData()
+                .then(([data, draggedMarkerIndex]) => {
+                  this.props.updatePlacesAfterMarkerDragged(data, draggedMarkerIndex);
+                })
+            }}
+            options={{ draggable: true }}
+            directions={this.props.directions}
+          />
+        );
+      }
+    }
 
     return (
       <GoogleMap
@@ -44,8 +72,7 @@ class BaseMap extends Component {
         defaultCenter={{ lat: 55.746382, lng: 37.617365 }}
         defaultOptions={{ styles: mapStyleConfig, disableDefaultUI: true }}
       >
-        {/*markers*/}
-        {this.props.directions && <DirectionsRenderer directions={this.props.directions} />}
+        {directions}
       </GoogleMap>
     );
   }
@@ -66,6 +93,34 @@ const Map = compose(
       this.setState({
         onMapMounted: ref => {
           refs.map = ref;
+        },
+        onDirectionsRendererMounted: ref => {
+          refs.directionsRenderer = ref;
+        },
+        getNewPlaceData: () => {
+          // this function will be invoked then user drags route marker,
+          // it will return promise which resolves with array: 
+          // 1st element - information about place under the marker,
+          // 2nd element - index of dragged marker (marker A has 0 index, marker B - 1 and so on...)
+          if (!refs.directionsRenderer) {
+            return;
+          }
+
+          /* eslint-disable no-undef */
+          const geocoder = new google.maps.Geocoder();
+          /* eslint-enable no-undef */
+
+          const newDirections = refs.directionsRenderer.getDirections();
+          const draggedMarkerIndex = newDirections.request.ac;
+          const newPlaceId = newDirections.geocoded_waypoints[draggedMarkerIndex].place_id;
+
+          return new Promise(resolve => {
+            geocoder.geocode({
+              placeId: newPlaceId,
+            }, result => {
+              resolve([result[0], draggedMarkerIndex]);
+            });
+          });
         },
         fitBounds: (places) => {
           if (!refs.map) {
@@ -100,7 +155,7 @@ const Map = compose(
               .slice(1, places.length - 1)
               .map(place => ({ location: place.geometry.location }));
           }
-         
+
           DirectionsService.route({
             origin,
             destination,
@@ -118,8 +173,7 @@ const Map = compose(
                 directions: result,
               });
             } else {
-              console.error(`error fetching directions`);
-              console.error(result);
+              alert('Could not display directions due to: ' + status);
             }
           });
         }
