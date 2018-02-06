@@ -7,6 +7,9 @@
     "browser": true,
     "jasmine": true
   },
+  "globals": {
+    "google": true
+  },
   "rules": {
     "react/jsx-filename-extension": [
       1,
