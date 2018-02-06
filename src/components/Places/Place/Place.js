@@ -75,6 +75,7 @@ const EnhancedPlace = compose(
     props.connectDropTarget(
       <li className={styles.Place} style={{opacity: props.isDragging ? 0 : 1}}>
         <div className={styles.PlaceName}>
+          {props.letterIndex}:{' '}
           {props.children}
         </div>
         <div

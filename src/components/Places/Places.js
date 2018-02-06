@@ -8,6 +8,10 @@ import Place from './Place/Place';
 // this component should be Class based
 // because I need Ref for drag and drop context
 class Places extends Component {
+  convertIndexToLetter = (index) => {
+    return String.fromCharCode(65 + index);
+  }
+
   render() {
     const places = this.props.places.map((place, i) => {
       return (
@@ -15,6 +19,7 @@ class Places extends Component {
           key={place.place_id}
           id={place.place_id}
           index={i}
+          letterIndex={this.convertIndexToLetter(i)}
           onPlaceDelete={() => this.props.onPlaceDelete(place.place_id)}
           onPlaceMove={this.props.onPlaceMove}
         >
