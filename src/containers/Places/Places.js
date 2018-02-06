@@ -5,8 +5,6 @@ import HTML5Backend from 'react-dnd-html5-backend'
 import Cards from '../../components/Cards/Cards';
 import Place from '../Place/Place';
 
-// this component should be Class based
-// because I need Ref for drag and drop context
 class Places extends Component {
   convertIndexToLetter = (index) => {
     return String.fromCharCode(65 + index);
