@@ -8,7 +8,7 @@ import {
   DirectionsRenderer
 } from "react-google-maps";
 
-import mapStyleConfig from './style';
+import mapStyleConfig from './styleConfig';
 import { GOOGLE_MAPS_URL } from '../../constants';
 
 // component to render base map,

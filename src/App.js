@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import Layout from './components/Layout/Layout';
 import Sidebar from './components/Sidebar/Sidebar';
-import Map from './components/Map/Map';
+import Map from './containers/Map/Map';
 import SearchBox from './components/SearchBox/SearchBox';
 import Places from './containers/Places/Places';
 
