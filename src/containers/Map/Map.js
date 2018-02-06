@@ -1,12 +1,13 @@
-import React, { Component } from "react";
-import { compose, withProps, lifecycle } from "recompose";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { compose, withProps, lifecycle } from 'recompose';
 import {
   withScriptjs,
   withGoogleMap,
   GoogleMap,
   Marker,
-  DirectionsRenderer
-} from "react-google-maps";
+  DirectionsRenderer,
+} from 'react-google-maps';
 
 import mapStyleConfig from './styleConfig';
 import { GOOGLE_MAPS_URL } from '../../constants';
@@ -14,6 +15,21 @@ import { GOOGLE_MAPS_URL } from '../../constants';
 // component to render base map,
 // will be enhaced with HOCs later
 class BaseMap extends Component {
+  static propTypes = {
+    places: PropTypes.arrayOf(PropTypes.any).isRequired,
+    renderDirections: PropTypes.func.isRequired,
+    fitBounds: PropTypes.func.isRequired,
+    directions: PropTypes.objectOf(PropTypes.any),
+    onDirectionsRendererMounted: PropTypes.func.isRequired,
+    getNewPlaceData: PropTypes.func.isRequired,
+    updatePlacesAfterMarkerDragged: PropTypes.func.isRequired,
+    onMapMounted: PropTypes.func.isRequired,
+  }
+
+  static defaultProps = {
+    directions: undefined,
+  }
+
   componentWillReceiveProps(nextProps) {
     if (
       nextProps.places !== this.props.places &&
@@ -35,34 +51,32 @@ class BaseMap extends Component {
     // user submited more then 1 places
     // if not - render a simple marker
     if (this.props.places.length === 1) {
-      const [ place ] = this.props.places;
-      const { location } = place.geometry
+      const [place] = this.props.places;
+      const { location } = place.geometry;
 
       directions = (
         <Marker
           key={place.place_id}
-          position={{ 
+          position={{
             lat: location.lat(),
             lng: location.lng(),
           }}
         />
       );
-    } else {
-      if (this.props.directions) {
-        directions = (
-          <DirectionsRenderer
-            ref={this.props.onDirectionsRendererMounted}
-            onDirectionsChanged={() => {
+    } else if (this.props.directions) {
+      directions = (
+        <DirectionsRenderer
+          ref={this.props.onDirectionsRendererMounted}
+          onDirectionsChanged={() => {
               this.props.getNewPlaceData()
                 .then(([data, draggedMarkerIndex]) => {
                   this.props.updatePlacesAfterMarkerDragged(data, draggedMarkerIndex);
-                })
+                });
             }}
-            options={{ draggable: true }}
-            directions={this.props.directions}
-          />
-        );
-      }
+          options={{ draggable: true }}
+          directions={this.props.directions}
+        />
+      );
     }
 
     return (
@@ -91,19 +105,19 @@ const Map = compose(
       const refs = {};
 
       this.setState({
-        onMapMounted: ref => {
+        onMapMounted: (ref) => {
           refs.map = ref;
         },
-        onDirectionsRendererMounted: ref => {
+        onDirectionsRendererMounted: (ref) => {
           refs.directionsRenderer = ref;
         },
         getNewPlaceData: () => {
           // this function will be invoked then user drags route marker,
-          // it will return promise which resolves with array: 
+          // it will return promise which resolves with array:
           // 1st element - information about place under the marker,
           // 2nd element - index of dragged marker (marker A has 0 index, marker B - 1 and so on...)
           if (!refs.directionsRenderer) {
-            return;
+            return undefined;
           }
 
           /* eslint-disable no-undef */
@@ -114,10 +128,10 @@ const Map = compose(
           const draggedMarkerIndex = newDirections.request.ac;
           const newPlaceId = newDirections.geocoded_waypoints[draggedMarkerIndex].place_id;
 
-          return new Promise(resolve => {
+          return new Promise((resolve) => {
             geocoder.geocode({
               placeId: newPlaceId,
-            }, result => {
+            }, (result) => {
               resolve([result[0], draggedMarkerIndex]);
             });
           });
@@ -131,16 +145,18 @@ const Map = compose(
           const bounds = new google.maps.LatLngBounds();
           /* eslint-enable no-undef */
 
-          places.forEach(place => {
+          places.forEach((place) => {
             bounds.extend(place.geometry.location);
           });
 
           refs.map.fitBounds(bounds);
-        }
+        },
       });
     },
     componentDidMount() {
+      /* eslint-disable react/no-did-mount-set-state */
       this.setState({
+      /* eslint-enable react/no-did-mount-set-state */
         renderDirections: (places) => {
           /* eslint-disable no-undef */
           const DirectionsService = new google.maps.DirectionsService();
@@ -165,7 +181,7 @@ const Map = compose(
             /* eslint-enable no-undef */
           }, (result, status) => {
             /* eslint-disable no-undef */
-            const okStatus = google.maps.DirectionsStatus.OK
+            const okStatus = google.maps.DirectionsStatus.OK;
             /* eslint-enable no-undef */
 
             if (status === okStatus) {
@@ -173,15 +189,15 @@ const Map = compose(
                 directions: result,
               });
             } else {
-              alert('Could not display directions due to: ' + status);
+              alert(`Could not display directions due to: ${status}`);
             }
           });
-        }
-      })
-    }
+        },
+      });
+    },
   }),
   withScriptjs,
-  withGoogleMap
+  withGoogleMap,
 )(BaseMap);
 
 export default Map;

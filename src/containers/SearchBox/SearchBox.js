@@ -1,4 +1,6 @@
+/* eslint-disable */
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { compose, withProps } from 'recompose';
 import { withScriptjs } from 'react-google-maps';
 import { StandaloneSearchBox } from 'react-google-maps/lib/components/places/StandaloneSearchBox';
@@ -7,6 +9,10 @@ import { GOOGLE_MAPS_URL } from '../../constants';
 import TextInput from '../../components/TextInput/TextInput';
 
 class SearchBox extends Component {
+  static propTypes = {
+    onPlacesChanged: PropTypes.func.isRequired,
+  }
+
   state = {
     searchTerm: '',
   }
@@ -21,8 +27,7 @@ class SearchBox extends Component {
     return (
       <div data-standalone-searchbox="">
         <StandaloneSearchBox
-          ref={(input) => this.searchInput = input}
-          bounds={this.props.bounds}
+          ref={(input) => { this.searchInput = input; }}
           onPlacesChanged={() => {
             this.props.onPlacesChanged(this.searchInput);
             this.setState({
@@ -43,10 +48,10 @@ class SearchBox extends Component {
 const EnhancedSearchBox = compose(
   withProps({
     googleMapURL: GOOGLE_MAPS_URL,
-    loadingElement: <div style={{ height: `100%` }} />,
-    containerElement: <div style={{ height: `400px` }} />,
+    loadingElement: <div style={{ height: '100%' }} />,
+    containerElement: <div style={{ height: '400px' }} />,
   }),
-  withScriptjs
+  withScriptjs,
 )(SearchBox);
 
 export default EnhancedSearchBox;

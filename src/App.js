@@ -21,11 +21,6 @@ class App extends Component {
     }
   }
 
-  isPlaceInStateAllready = (newPlace) => (
-    this.state.places
-      .some(place => place.place_id === newPlace.place_id)
-  )
-
   onPlaceDelete = (placeId) => {
     this.setState({
       places: this.state.places.filter(place => (
@@ -44,8 +39,13 @@ class App extends Component {
     });
   }
 
+  isPlaceInStateAllready = newPlace => (
+    this.state.places
+      .some(place => place.place_id === newPlace.place_id)
+  )
+
   updatePlacesAfterMarkerDragged = (newPlace, index) => {
-    const places = this.state.places;
+    const { places } = this.state;
 
     const newPlaces = [
       ...places.slice(0, index),
@@ -76,6 +76,6 @@ class App extends Component {
       </Layout>
     );
   }
-};
+}
 
 export default App;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { compose } from 'recompose';
-import { findDOMNode } from 'react-dom'
-import { DragSource, DropTarget } from 'react-dnd'
+import { findDOMNode } from 'react-dom';
+import { DragSource, DropTarget } from 'react-dnd';
 import { dndItemTypes } from '../../constants';
 
 import Card from '../../components/Card/Card';
@@ -11,31 +11,33 @@ const placeSource = {
     return {
       id: props.id,
       index: props.index,
-    }
+    };
   },
 };
 
 const placeTarget = {
   hover(props, monitor, component) {
-    const dragIndex = monitor.getItem().index
-    const hoverIndex = props.index
+    const dragIndex = monitor.getItem().index;
+    const hoverIndex = props.index;
 
     // Don't replace items with themselves
     if (dragIndex === hoverIndex) {
-      return
+      return;
     }
 
     // Determine rectangle on screen
-    const hoverBoundingRect = findDOMNode(component).getBoundingClientRect()
+    /* eslint-disable react/no-find-dom-node */
+    const hoverBoundingRect = findDOMNode(component).getBoundingClientRect();
+    /* eslint-enable react/no-find-dom-node */
 
     // Get vertical middle
-    const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2
+    const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
 
     // Determine mouse position
-    const clientOffset = monitor.getClientOffset()
+    const clientOffset = monitor.getClientOffset();
 
     // Get pixels to the top
-    const hoverClientY = clientOffset.y - hoverBoundingRect.top
+    const hoverClientY = clientOffset.y - hoverBoundingRect.top;
 
     // Only perform the move when the mouse has crossed half of the items height
     // When dragging downwards, only move when the cursor is below 50%
@@ -43,12 +45,12 @@ const placeTarget = {
 
     // Dragging downwards
     if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
-      return
+      return;
     }
 
     // Dragging upwards
     if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
-      return
+      return;
     }
 
     // Time to actually perform the action
@@ -58,7 +60,9 @@ const placeTarget = {
     // Generally it's better to avoid mutations,
     // but it's good here for the sake of performance
     // to avoid expensive index searches.
-    monitor.getItem().index = hoverIndex
+    /* eslint-disable no-param-reassign */
+    monitor.getItem().index = hoverIndex;
+    /* eslint-enable no-param-reassign */
   },
 };
 
@@ -69,20 +73,20 @@ const Place = compose(
   DragSource(dndItemTypes.PLACE, placeSource, (connect, monitor) => ({
     connectDragSource: connect.dragSource(),
     isDragging: monitor.isDragging(),
-  }))
-)(props => {
-  return props.connectDragSource(
-    props.connectDropTarget(
-      <div style={{ opacity: props.isDragging ? 0 : 1 }}>
-        <Card
-          letterIndex={props.letterIndex}
-          onCardDelete={props.onPlaceDelete}
-        >
-          {props.children}
-        </Card>
-      </div>
-    ),
-  )
+  })),
+)((props) => {
+  const place = (
+    <li style={{ opacity: props.isDragging ? 0 : 1 }}>
+      <Card
+        letterIndex={props.letterIndex}
+        onCardDelete={props.onPlaceDelete}
+      >
+        {props.children}
+      </Card>
+    </li>
+  );
+
+  return props.connectDragSource(props.connectDropTarget(place));
 });
 
 export default Place;
