@@ -3,9 +3,9 @@ import React from 'react';
 import styles from './Header.css';
 
 const Header = () => (
-  <div className={styles.Header}>
+  <header className={styles.Header}>
       ROUTE PLANNER
-  </div>
+  </header>
 );
 
 export default Header;
