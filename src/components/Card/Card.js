@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import styles from './Card.css';
 
 const Card = props => (
-  <li className={styles.Card}>
+  <div className={styles.Card}>
     <div className={styles.CardName}>
       {props.children}
     </div>
@@ -14,7 +14,7 @@ const Card = props => (
     >
         DELETE
     </button>
-  </li>
+  </div>
 );
 
 Card.defaultProps = {
